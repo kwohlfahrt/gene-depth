@@ -21,9 +21,9 @@ def load_spots(path):
         with path.open("rb") as f:
             return load(f)
     elif path.suffix == ".csv":
-        return np.loadtxt(str(path), dtype='uint', delimiter=',')
+        return np.loadtxt(str(path), ndmin=2, dtype='uint', delimiter=',')
     elif path.suffix == ".txt":
-        return np.loadtxt(str(path), dtype='uint')
+        return np.loadtxt(str(path), ndmin=2, dtype='uint')
     else:
         raise ValueError("Unrecognized file type: {}".format(path.suffix))
 
