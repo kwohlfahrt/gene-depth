@@ -69,6 +69,8 @@ def plot(args):
     keys, values = zip(*sorted(grouped, key=itemgetter(0)))
     labels = list(map("{}\n(n={})".format, keys, map(len, values)))
     ax.boxplot([v['depth'] for v in values], labels=labels)
+    if args.unit == '%':
+        ax.set_ylim([0, 100])
     plt.setp(ax.get_xticklabels(), rotation=90)
 
     fig.tight_layout()
