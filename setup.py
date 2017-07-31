@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name="gene_depth",
-      version="0.0.1",
+      version="0.0.2",
       description="A set of binaries for running depth analysis on microscope images",
       packages=['gene_depth'],
       requires=['numpy (>=1.10)', 'scipy', 'skimage', 'pandas'],

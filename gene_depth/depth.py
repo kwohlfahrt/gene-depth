@@ -69,12 +69,13 @@ def calc(label, segments, peaks, mode='absolute', scale=1.0):
 @click.argument('depths', type=Path, nargs=-1)
 @click.option('--unit', type=str, required=True, help="The unit for the y-axis")
 @click.option('--output', type=Path)
-def plot(depths, unit, output=None):
+@click.option('--figsize', type=(float, float), default=(3.0, 6.0))
+def plot(depths, unit, output=None, figsize=(3.0, 6.0)):
     import matplotlib
     if output is not None:
         matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(1, 1, figsize=(3, 6))
+    fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     data = pd.concat(map(pd.read_csv, map(str, depths)))
     ax.set_ylabel("Depth ({})".format(unit))
