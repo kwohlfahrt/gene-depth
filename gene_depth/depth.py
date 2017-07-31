@@ -37,11 +37,9 @@ def load_spots(path):
 @click.argument('segments', type=Path)
 @click.argument('peaks', type=Path)
 @click.option('--mode', type=click.Choice(['absolute', 'relative']), default='absolute')
-@click.option('--dilation', type=int, default=0,
-              help="How much to grow each cell")
 @click.option('--scale', type=(float, float), default=(1.0, 1.0),
               help="The scale along each axis")
-def calc(label, segments, peaks, mode='absolute', dilation=0, scale=1.0):
+def calc(label, segments, peaks, mode='absolute', scale=1.0):
     from sys import stdout
 
     segments = imread(str(segments))
@@ -51,10 +49,6 @@ def calc(label, segments, peaks, mode='absolute', dilation=0, scale=1.0):
 
     for segment in np.unique(segments)[1:]:
         background = segments == segment
-        if dilation > 0:
-            background = morphology.binary_dilation(
-                background, np.ones((dilation,) * segments.ndim)
-            )
         distance = dual_distance(background, sampling=scale)
 
         cell_depths = distance[tuple(peaks[:, ::-1].T)]

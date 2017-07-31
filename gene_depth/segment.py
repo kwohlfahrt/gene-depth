@@ -38,6 +38,7 @@ def run(image, output, threshold, scale=(1.0, 1.0), structure=(1, 1), min_size=5
     structure = np.ones(structure, dtype='bool')
     processes = [partial(morphology.binary_opening, structure=structure),
                  partial(morphology.binary_closing, structure=structure),
+                 partial(morphology.binary_dilation, structure=structure),
                  morphology.binary_fill_holes]
     for process in processes:
         image = process(image)
