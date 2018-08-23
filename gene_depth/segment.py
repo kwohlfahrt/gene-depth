@@ -54,8 +54,9 @@ def run(image, output, threshold, scale=(1.0, 1.0), structure=(1, 1), min_size=5
 
 @segment.command()
 @click.argument("image", type=Path)
+@click.argument("segments", type=Path)
 @click.option('--output', type=Path)
-def plot(image, output=None):
+def plot(image, segments, output=None):
     import matplotlib
     from matplotlib.colors import hsv_to_rgb
     if output is not None:
@@ -64,18 +65,21 @@ def plot(image, output=None):
 
     rng = np.random.RandomState(4)
 
+    segments = imread(str(segments))
     image = imread(str(image))
+    image = image / image.max()
 
-    ncolors = image.max()
-    colors = np.ones((ncolors+1, 3), dtype='float')
+    ncolors = segments.max()
+    colors = np.zeros((ncolors+1, 3), dtype='float')
+    colors[1:, 0] = rng.uniform(0, 1, size=ncolors)
     colors[1:, 1] = 0.9 # saturation
     colors[1:, 2] = 0.95 # value
-    colors[1:, 0] = rng.uniform(0, 1, size=ncolors)
-    colors[0, :] = [0, 0, 1] # white background
-    colors = hsv_to_rgb(colors)
+
+    plot = colors[segments]
+    plot[:, :, 2] = image
 
     fig, ax = plt.subplots(1, 1)
-    ax.imshow(colors[image], interpolation='nearest')
+    ax.imshow(hsv_to_rgb(plot), interpolation='nearest')
     ax.set_xticks([])
     ax.set_yticks([])
 
